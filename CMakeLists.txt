@@ -12,5 +12,5 @@ file(GLOB_RECURSE SOURCES "src/*.c")
 add_executable(superGraph ${SOURCES})
 target_include_directories(superGraph PRIVATE include)
 
-target_link_libraries(superGraph ${SDL2_LIBRARIES})
+target_link_libraries(superGraph ${SDL2_LIBRARIES} m)
 
