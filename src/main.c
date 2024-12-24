@@ -41,7 +41,7 @@ void render() {
     setPixel(100, 100, color(255, 255, 255, 255)); // Test pixel
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     state.window = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     state.renderer = SDL_CreateRenderer(state.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
