@@ -46,57 +46,29 @@ v3_t v3_cross(v3_t a, v3_t b) {
     };
 }
 
-v3_t v3_dot(v3_t a, v3_t b) {
-    return (v3_t) {
-        .x = a.x * b.x,
-        .y = a.y * b.y,
-        .z = a.z * b.z
-    };
-}
-
-// sqrtf((x2) - (x1))^2 + ((y2) - (y1))^2 + ((z2) - (z1))^2
-v3_t RayDistance(v3_t a, v3_t b) {
-    return (v3_t) {
-        .x = b.x - a.x,
-        .y = b.y - a.y,
-        .z = b.z - a.z
-    };
-}
-
-// A^2 + B^2 + C^2 = D^2
-float length(v3_t a) {
-    return sqrtf(a.x * a.x + a.y * a.y + a.z * a.z);
-}
-
-// linear interpolation
-v3_t lerp(v3_t a, v3_t b, float t) {
-    return (v3_t) {
-        .x = a.x + t * (b.x - a.x),
-        .y = a.y + t * (b.y - a.y),
-        .z = a.z + t * (b.z - a.z)
-    };
+float v3_dot(v3_t a, v3_t b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 // ray equation: P = O + t(V-O)
 // ray equation: P = O + tD
-v3_t RayCast(v3_t origin, v3_t direction, float t) {
+v3_t rayeq(const v3_t origin, const v3_t dir, const float step) {
     return (v3_t) {
-        .x = origin.x + t * (float) RayDistance(origin, direction).x,
-        .y = origin.y + t * (float) RayDistance(origin, direction).y,
-        .z = origin.z + t * (float) RayDistance(origin, direction).z
+        .x = origin.x + step * dir.x,
+        .y = origin.y + step * dir.y,
+        .z = origin.z + step * dir.z
     };
 }
 
 // NOTE: SDL already does this for you when you create a window with a smaller texture
-
 // Determines which square on the viewport the pixel is in : Already done by SDL
 // Vx = Cx * Vw/Cw : returns the x coordinate of the pixel in the viewport
 // Vy = Cy * Vh/Ch : returns the y coordinate of the pixel in the viewport
-// v3_t getPixelIndex(uint32_t x, uint32_t y) {
-//    return (v3_t) {
-//        .x = (float) x * SCREEN_WIDTH / WINDOW_WIDTH,
-//        .y = (float) y * SCREEN_HEIGHT / WINDOW_HEIGHT,
-//        .z = 0
-//    };
-// }
+__attribute__((deprecated)) v3_t getPixelIndex(uint32_t x, uint32_t y) {
+   return (v3_t) {
+       .x = (float) x * SCREEN_WIDTH / WINDOW_WIDTH,
+       .y = (float) y * SCREEN_HEIGHT / WINDOW_HEIGHT,
+       .z = 0
+   };
+}
 

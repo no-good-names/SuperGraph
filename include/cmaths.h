@@ -1,9 +1,6 @@
 #ifndef CMATHS_H
 #define CMATHS_H
 
-#if __cplusplus
-extern "C" {
-#endif
 #include <typedef.h>
 
 // VECTOR MATHS
@@ -11,10 +8,7 @@ v3_t v3_add(v3_t a, v3_t b);
 v3_t v3_sub(v3_t a, v3_t b);
 v3_t v3_mul(v3_t a, v3_t b);
 v3_t v3_cross(v3_t a, v3_t b);
-v3_t v3_dot(v3_t a, v3_t b);
-
-v3_t lerp(v3_t a, v3_t b, float t);
-v3_t v3_normalize(v3_t a);
+float v3_dot(v3_t a, v3_t b);
 
 // TODO: MOVE THIS TO A SEPARATE FILE
 // MATRIX MATHS
@@ -48,11 +42,9 @@ v3_t v3_normalize(v3_t a);
         {a[2][0] - b[2][0],         \
         a[2][1] - b[2][1],          \
         a[2][2] - b[2][2]}})
-// RAY MATHS
-v3_t RayDistance(v3_t a, v3_t b);
 
-#if __cplusplus
-}
-#endif
+// Ray equation
+v3_t rayeq(const v3_t origin, const v3_t dir, const float step);
+__attribute__((deprecated)) v3_t getPixelIndex(uint32_t x, uint32_t y);
 
 #endif // CMATHS_H
