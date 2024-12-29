@@ -7,6 +7,7 @@
 
 #include <typedef.h>
 #include <cmaths.h>
+#include <stdlib.h>
 
 v3_t CanvasToViewport(const int32_t x, const int32_t y);
 v2_t IntersectRaySphere(v3_t origin, v3_t direction, Sphere_t sphere);
