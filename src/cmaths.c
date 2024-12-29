@@ -60,6 +60,11 @@ v3_t rayeq(const v3_t origin, const v3_t dir, const float step) {
     };
 }
 
+// B * t + A * (1-t)
+float lerp(float a, float b, float t) {
+    return a + t * (b - a);
+}
+
 // NOTE: SDL already does this for you when you create a window with a smaller texture
 // Determines which square on the viewport the pixel is in : Already done by SDL
 // Vx = Cx * Vw/Cw : returns the x coordinate of the pixel in the viewport
@@ -70,5 +75,28 @@ __attribute__((deprecated)) v3_t getPixelIndex(uint32_t x, uint32_t y) {
        .y = (float) y * SCREEN_HEIGHT / WINDOW_HEIGHT,
        .z = 0
    };
+}
+
+void drawLine(void (setPixel)(int32_t x, int32_t y, uint32_t color), v2_t start, v2_t end, uint32_t color) {
+    int dx = abs(end.x - start.x);
+    int dy = abs(end.y - start.y);
+    int sx = start.x < end.x ? 1 : -1;
+    int sy = start.y < end.y ? 1 : -1;
+    int err = dx - dy;
+    int e2;
+
+    while(true) {
+        setPixel(start.x, start.y, color);
+        if(start.x == end.x && start.y == end.y) break;
+        e2 = 2 * err;
+        if(e2 > -dy) {
+            err -= dy;
+            start.x += sx;
+        }
+        if(e2 < dx) {
+            err += dx;
+            start.y += sy;
+        }
+    }
 }
 

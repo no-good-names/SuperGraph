@@ -8,7 +8,7 @@ $ cmake -S . -B build -G "Ninja" # Ninja isnt required and build can be changed
 ```
 
 # DEPENDENCIES
-- SDL2 (I used apt to install)
+- SDL2 (Use mingw, cygwin, etc for windows)
 - cmake
 - Ninja (for faster builds and optional)
 

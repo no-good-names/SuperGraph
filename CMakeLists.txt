@@ -7,10 +7,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-file(GLOB_RECURSE SOURCES "src/*.c")
-
-add_executable(superGraph ${SOURCES})
+add_executable(superGraph
+        src/main.c
+        src/cmaths.c
+        src/scene.c
+        src/renderer.c
+)
 target_include_directories(superGraph PRIVATE include)
 
 target_link_libraries(superGraph ${SDL2_LIBRARIES} m)
-
