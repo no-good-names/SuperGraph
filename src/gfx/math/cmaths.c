@@ -1,11 +1,11 @@
 #include <stdio.h>
-#include <typedef.h>
-#include <cmaths.h>
 #include <math.h>
 #include <stdbool.h>
+#include "../typedef.h"
+#include "cmaths.h"
 
 // add two vectors
-v3_t v3_add(v3_t a, v3_t b) {
+v3_t v3_add(const v3_t a, const v3_t b) {
     return (v3_t) {
         .x = a.x + b.x,
         .y = a.y + b.y,
@@ -13,7 +13,7 @@ v3_t v3_add(v3_t a, v3_t b) {
     };
 }
 
-v3_t v3_sub(v3_t a, v3_t b) {
+v3_t v3_sub(const v3_t a, const v3_t b) {
     return (v3_t) {
         .x = a.x - b.x,
         .y = a.y - b.y,
@@ -21,7 +21,7 @@ v3_t v3_sub(v3_t a, v3_t b) {
     };
 }
 
-v3_t v3_mul(v3_t a, v3_t b) {
+v3_t v3_mul(const v3_t a, const v3_t b) {
     return (v3_t) {
         .x = a.x * b.x,
         .y = a.y * b.y,
@@ -29,7 +29,7 @@ v3_t v3_mul(v3_t a, v3_t b) {
     };
 }
 
-v3_t v3_normalize(v3_t a) {
+v3_t v3_normalize(const v3_t a) {
     float length = sqrtf(a.x * a.x + a.y * a.y + a.z * a.z);
     return (v3_t) {
         .x = a.x / length,
@@ -38,7 +38,7 @@ v3_t v3_normalize(v3_t a) {
     };
 }
 
-v3_t v3_cross(v3_t a, v3_t b) {
+v3_t v3_cross(const v3_t a, const v3_t b) {
     return (v3_t) {
         .x = a.y * b.z - a.z * b.y,
         .y = a.z * b.x - a.x * b.z,
@@ -46,7 +46,7 @@ v3_t v3_cross(v3_t a, v3_t b) {
     };
 }
 
-float v3_dot(v3_t a, v3_t b) {
+float v3_dot(const v3_t a, const v3_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
@@ -78,25 +78,20 @@ __attribute__((deprecated)) v3_t getPixelIndex(uint32_t x, uint32_t y) {
 }
 
 void drawLine(void (setPixel)(int32_t x, int32_t y, uint32_t color), v2_t start, v2_t end, uint32_t color) {
-    int dx = abs(end.x - start.x);
-    int dy = abs(end.y - start.y);
-    int sx = start.x < end.x ? 1 : -1;
-    int sy = start.y < end.y ? 1 : -1;
-    int err = dx - dy;
-    int e2;
+    if (start.x > end.x) {
+        const v2_t temp = start;
+        start = end;
+        end = temp;
+    }
 
-    while(true) {
-        setPixel(start.x, start.y, color);
-        if(start.x == end.x && start.y == end.y) break;
-        e2 = 2 * err;
-        if(e2 > -dy) {
-            err -= dy;
-            start.x += sx;
-        }
-        if(e2 < dx) {
-            err += dx;
-            start.y += sy;
-        }
+    // Calculate the slope (a)
+    const float a = (end.y - start.y) / (end.x - start.x);
+    float y = start.y;
+
+    // Draw the line
+    for (int32_t x = (int) start.x; (float) x <= end.x; x++) {
+        setPixel(x, (int32_t)roundf(y), color); // Use round to handle fractional y
+        y += a; // Increment y based on the slope
     }
 }
 

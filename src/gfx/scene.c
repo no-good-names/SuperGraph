@@ -2,7 +2,7 @@
 // Created by cp176 on 12/28/2024.
 //
 
-#include <scene.h>
+#include "scene.h"
 
 void init_scene(scene_t *scene) {
 	scene->object_count = 0;

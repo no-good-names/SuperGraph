@@ -5,8 +5,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <typedef.h>
-#include <cmaths.h>
+#include "typedef.h"
+#include "math/cmaths.h"
 
 #ifndef MAX_OBJECTS
 #define MAX_OBJECTS 100

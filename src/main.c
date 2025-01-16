@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include <typedef.h>
-#include <cmaths.h>
-#include <renderer.h>
+#include "gfx/typedef.h"
+#include "gfx/math/cmaths.h"
+#include "gfx/renderer.h"
 
 struct {
     SDL_Window *window; // canvas
@@ -52,12 +52,11 @@ void render() {
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     state.window = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    state.renderer = SDL_CreateRenderer(state.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    state.renderer = SDL_CreateRenderer(state.window, -1, SDL_RENDERER_ACCELERATED);
     state.texture = SDL_CreateTexture(state.renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
     state.running = true;
     state.camera = (v3_t) {0, 0, 0};
     state.view_dir = (v3_t) {0, 0, 0};
-    fprintf(stderr, "The line is here on purpose\n");
     while (state.running) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {

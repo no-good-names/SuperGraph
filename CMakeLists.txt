@@ -16,10 +16,14 @@ set(LIBS ${LIBS} ${SDL2_LIBRARIES} m)
 
 add_executable(superGraph
         src/main.c
-        src/cmaths.c
-        src/scene.c
-        src/renderer.c
+        src/gfx/math/cmaths.c
+        src/gfx/math/cmaths.h
+        src/gfx/scene.c
+        src/gfx/scene.h
+        src/gfx/renderer.h
+        src/gfx/light.c
+        src/gfx/light.h
+        src/gfx/rays.c
+        src/gfx/rays.h
 )
-target_include_directories(superGraph PRIVATE include)
-
 target_link_libraries(superGraph ${LIBS})

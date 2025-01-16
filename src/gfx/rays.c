@@ -1,22 +1,19 @@
 //
+// Created by cp176 on 1/15/2025.
+//
+
+#include "rays.h"
+
+//
 // Created by cp176 on 12/28/2024.
 //
 
 #include <math.h>
-#include <renderer.h>
+#include <stdlib.h>
+#include "renderer.h"
 
 // IMPORTANT
 // NOTE: THIS CODE ONLY WORKS WITH SPHERES FOR NOW
-
-v3_t CanvasToViewport(const int32_t x, const int32_t y) {
-	// Depth z = 1 for now
-	v3_t ray_dir = {
-		(float) x * VIEWPORT_WIDTH / SCREEN_WIDTH,
-		(float) y * VIEWPORT_HEIGHT / SCREEN_HEIGHT,
-		1 // Assuming the camera is looking along +Z initially
-	};
-	return ray_dir;
-}
 
 v2_t IntersectRaySphere(const v3_t origin, const v3_t direction, const Sphere_t sphere) {
 	const float r = sphere.radius;
@@ -55,3 +52,4 @@ uint32_t TraceRay(const v3_t origin, const v3_t direction, const float t_min, co
 	}
 	return closest_sphere->color;
 }
+
