@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include "SDL2/SDL_render.h"
+#include "SDL2/SDL_stdinc.h"
+#include "gfx/light.h"
 #include "gfx/typedef.h"
 #include "gfx/math/cmaths.h"
 #include "gfx/renderer.h"
@@ -18,10 +21,17 @@ struct {
 // temp global
 // Test Spheres
 Sphere_t s[4] = {
-    {.center = {0.0f, -1.0f, 3.0f}, .radius = 1, RGB(0xFF, 0x00, 0xFF) },
-    {.center = {-1.0f, 0.0f, 4.0f}, .radius = 1, RGB(0xFF, 0x00, 0x00) },
+    //          x,     y,    z,          radius,     r,    g,    b
+    {.center = {-1.0f, 0.0f, 5.0f}, .radius = 1, RGB(0xFF, 0x00, 0xFF) },
+    {.center = { 1.0f, 0.0f, 4.0f}, .radius = 1, RGB(0xFF, 0x00, 0x00) },
     {.center = {-0.3f, 0.0f, 5.0f}, .radius = 1, RGB(0x00, 0x00, 0xFF) },
-    {.center = {-0.3f, 1.0f, 6.0f}, .radius = 1, RGB(0x00, 0xFF, 0xFF) }
+    {.center = {-0.3f, 1.0f, 6.0f}, .radius = 1, RGB(0x00, 0xFF, 0x11) }
+};
+
+Light_t light = {
+    .type = LIGHT_POINT,
+    .position = {0, 0, 0},
+    .intensity = 1.0f
 };
 
 
@@ -46,13 +56,13 @@ void render() {
             setPixel(x, y, color);
         }
     }
-    drawLine(setPixel, (v2_t) {0, 0}, (v2_t) {100, 100}, 0xFFFFFFFF << (SDL_GetTicks()));
+    drawLine(setPixel, (v2_t) {0, 0}, (v2_t) {100, 100}, 0xFFFFFFFF << (SDL_GetTicks()) >> (8));
 }
 
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     state.window = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    state.renderer = SDL_CreateRenderer(state.window, -1, SDL_RENDERER_ACCELERATED);
+    state.renderer = SDL_CreateRenderer(state.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     state.texture = SDL_CreateTexture(state.renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
     state.running = true;
     state.camera = (v3_t) {0, 0, 0};

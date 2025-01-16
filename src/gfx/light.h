@@ -6,12 +6,14 @@
 #define LIGHT_H
 
 #include "math/cmaths.h"
+#include "SDL2/SDL_stdinc.h"
 
 enum LIGHT_TYPE {
 	LIGHT_NONE = 0,
 	LIGHT_POINT,
 	LIGHT_DIRECTIONAL,
-	LIGHT_SPOT
+	LIGHT_SPOT,
+	LIGHT_AMBIENT
 };
 
 typedef struct Light_t {
@@ -20,5 +22,7 @@ typedef struct Light_t {
 	float intensity;
 	v3_t direction;
 } Light_t;
+
+float compute_light(Light_t light, v3_t point, v3_t normal);
 
 #endif //LIGHT_H

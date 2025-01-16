@@ -3,13 +3,9 @@
 //
 
 #include "rays.h"
-
-//
-// Created by cp176 on 12/28/2024.
-//
-
 #include <math.h>
 #include <stdlib.h>
+#include "light.h"
 #include "renderer.h"
 
 // IMPORTANT
@@ -52,4 +48,3 @@ uint32_t TraceRay(const v3_t origin, const v3_t direction, const float t_min, co
 	}
 	return closest_sphere->color;
 }
-

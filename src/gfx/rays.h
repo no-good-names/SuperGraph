@@ -5,6 +5,7 @@
 #ifndef RAYS_H
 #define RAYS_H
 
+#include "light.h"
 #include "typedef.h"
 #include "math/cmaths.h"
 

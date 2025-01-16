@@ -63,6 +63,8 @@ v3_t v3_sub(v3_t a, v3_t b);
 v3_t v3_mul(v3_t a, v3_t b);
 v3_t v3_cross(v3_t a, v3_t b);
 float v3_dot(v3_t a, v3_t b);
+float v3_length(v3_t a);
+v3_t v3_normalize(v3_t a);
 
 // Ray equation
 v3_t rayeq(v3_t origin, v3_t dir, float step);

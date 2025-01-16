@@ -6,6 +6,7 @@
 #define RENDERER_H
 
 #include "typedef.h"
+#include "utils/utils.h"
 #include "math/cmaths.h"
 #include "light.h"
 #include "scene.h"

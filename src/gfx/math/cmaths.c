@@ -50,6 +50,10 @@ float v3_dot(const v3_t a, const v3_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+float v3_length(v3_t a) {
+    return sqrtf(a.x * a.x + a.y * a.y + a.z * a.z);
+}
+
 // ray equation: P = O + t(V-O)
 // ray equation: P = O + tD
 v3_t rayeq(const v3_t origin, const v3_t dir, const float step) {
@@ -94,4 +98,3 @@ void drawLine(void (setPixel)(int32_t x, int32_t y, uint32_t color), v2_t start,
         y += a; // Increment y based on the slope
     }
 }
-
