@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include "SDL2/SDL_render.h"
-#include "SDL2/SDL_stdinc.h"
-#include "gfx/light.h"
-#include "gfx/typedef.h"
-#include "gfx/math/cmaths.h"
 #include "gfx/renderer.h"
 
 struct {
@@ -46,13 +41,21 @@ void setPixel(int32_t x, int32_t y, const uint32_t color) {
     state.pixels[(y * SCREEN_WIDTH) + x] = color;
 }
 
+v3_t rotateX(v3_t v, float angle) {
+    return (v3_t) {
+        .x = v.x,
+        .y = v.y * cosf(angle) - v.z * sinf(angle),
+        .z = v.y * sinf(angle) + v.z * cosf(angle)
+    };
+}
+
 // render function
 void render() {
     for (int y = -SCREEN_HEIGHT/2; y < SCREEN_HEIGHT / 2; y++) {
         for (int x = -SCREEN_WIDTH/2; x < SCREEN_WIDTH/2; x++) {
             // TODO: do something for show
             state.view_dir = CanvasToViewport(x, y);
-            uint32_t color = TraceRay(state.camera, state.view_dir, 0, INFINITY, s, 4);
+            uint32_t color = TraceRay(state.camera, state.view_dir, 0, INFINITY, s, 4, light);
             setPixel(x, y, color);
         }
     }
@@ -89,6 +92,9 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[])
         }
         if (keys[SDL_SCANCODE_D]) {
             state.camera.x += 0.1f;
+        }
+        if (keys[SDL_SCANCODE_RIGHT]) {
+            state.view_dir = rotateX(state.camera, 0.1f);
         }
 
         memset(state.pixels, 0, sizeof(state.pixels)); // Clear the pixel buffer

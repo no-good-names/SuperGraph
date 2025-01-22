@@ -5,8 +5,10 @@
 #include "rays.h"
 #include <math.h>
 #include <stdlib.h>
+#include "SDL2/SDL_stdinc.h"
 #include "light.h"
 #include "renderer.h"
+#include "color.h"
 
 // IMPORTANT
 // NOTE: THIS CODE ONLY WORKS WITH SPHERES FOR NOW
@@ -29,7 +31,7 @@ v2_t IntersectRaySphere(const v3_t origin, const v3_t direction, const Sphere_t 
 	return (v2_t) {t1, t2};
 }
 
-uint32_t TraceRay(const v3_t origin, const v3_t direction, const float t_min, const float t_max, Sphere_t *s, const int numOfS) {
+uint32_t TraceRay(const v3_t origin, const v3_t direction, const float t_min, const float t_max, Sphere_t *s, const int numOfS, const Light_t light) {
 	float closest_t = INFINITY;
 	Sphere_t *closest_sphere = NULL;
 	for (uint32_t i = 0; i < numOfS; i++) {
@@ -46,5 +48,5 @@ uint32_t TraceRay(const v3_t origin, const v3_t direction, const float t_min, co
 	if (closest_sphere == NULL) {
 		return RGB(0,0,0);
 	}
-	return closest_sphere->color;
+	return MULTIPLY_COLOR(closest_sphere->color, compute_light(light, rayeq(origin, direction, closest_t), v3_normalize(v3_sub(rayeq(origin, direction, closest_t), closest_sphere->center))));
 }

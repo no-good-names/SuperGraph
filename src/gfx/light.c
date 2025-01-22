@@ -21,8 +21,5 @@ float compute_light(Light_t light, v3_t point, v3_t normal) {
             i += light.intensity * n_dot_l / (v3_length(normal) * v3_length(l));
         }
     }
-    if(i >= 1) {
-        return 1;
-    }
     return i;
 }

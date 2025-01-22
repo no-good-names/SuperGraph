@@ -20,6 +20,6 @@ static v3_t CanvasToViewport(const int32_t x, const int32_t y) {
 }
 
 v2_t IntersectRaySphere(v3_t origin, v3_t direction, Sphere_t sphere);
-uint32_t TraceRay(v3_t origin, v3_t direction, float t_min, float t_max, Sphere_t *s, int numOfS);
+uint32_t TraceRay(v3_t origin, v3_t direction, float t_min, float t_max, Sphere_t *s, int numOfS, Light_t light);
 
 #endif //RAYS_H
