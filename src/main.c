@@ -1,24 +1,25 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include "gfx/renderer.h"
+#include <math.h>
+#include "gfx/gfx.h"
 
 struct {
     SDL_Window *window; // canvas
     SDL_Renderer *renderer;
     SDL_Texture *texture;
     uint32_t pixels[SCREEN_WIDTH * SCREEN_HEIGHT]; // viewport
-    v3_t camera; // camera pos in 3D space (x, y, z)
-    v3_t view_dir; // for basic raytracing
+    Camera_t camera;
     bool running;
 } state;
 
 // temp global
 // Test Spheres
+static uint8_t numberOfSpheres = 4;
 Sphere_t s[4] = {
     //          x,     y,    z,          radius,     r,    g,    b
-    {.center = {-1.0f, 0.0f, 5.0f}, .radius = 1, RGB(0xFF, 0x00, 0xFF) },
-    {.center = { 1.0f, 0.0f, 4.0f}, .radius = 1, RGB(0xFF, 0x00, 0x00) },
+    {.center = {-2.2f, 0.0f, 5.0f}, .radius = 1, RGB(0xFF, 0x00, 0xFF) },
+    {.center = { 1.5f, 0.0f, 4.0f}, .radius = 1, RGB(0xFF, 0x00, 0x00) },
     {.center = {-0.3f, 0.0f, 5.0f}, .radius = 1, RGB(0x00, 0x00, 0xFF) },
     {.center = {-0.3f, 1.0f, 6.0f}, .radius = 1, RGB(0x00, 0xFF, 0x11) }
 };
@@ -29,37 +30,30 @@ Light_t light = {
     .intensity = 1.0f
 };
 
-
 // Sets the pixel at the given x and y coordinates to the given color
 void setPixel(int32_t x, int32_t y, const uint32_t color) {
+    // start at the middle of the screen
     x += SCREEN_WIDTH/2;
     y += SCREEN_HEIGHT/2;
     // Check if x or y is out of bounds
+    // EX: x=-SCREEN_WIDTH/2 - 1; x+= SCREEN_WIDTH/2; x=-1; doesn't draw
     if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT) {
         return;
     }
     state.pixels[(y * SCREEN_WIDTH) + x] = color;
 }
 
-v3_t rotateX(v3_t v, float angle) {
-    return (v3_t) {
-        .x = v.x,
-        .y = v.y * cosf(angle) - v.z * sinf(angle),
-        .z = v.y * sinf(angle) + v.z * cosf(angle)
-    };
-}
-
 // render function
 void render() {
     for (int y = -SCREEN_HEIGHT/2; y < SCREEN_HEIGHT / 2; y++) {
         for (int x = -SCREEN_WIDTH/2; x < SCREEN_WIDTH/2; x++) {
-            // TODO: do something for show
-            state.view_dir = CanvasToViewport(x, y);
-            uint32_t color = TraceRay(state.camera, state.view_dir, 0, INFINITY, s, 4, light);
+            // Use the updated view_dir for rendering
+            v3_t ray_dir = rotateX(CanvasToViewport(x, y), atan2f(state.camera.view_dir.z, state.camera.view_dir.x));
+            uint32_t color = TraceRay(state.camera.position, ray_dir, 0, INFINITY, s, numberOfSpheres, light);
             setPixel(x, y, color);
         }
     }
-    drawLine(setPixel, (v2_t) {0, 0}, (v2_t) {100, 100}, 0xFFFFFFFF << (SDL_GetTicks()) >> (8));
+    drawLine(setPixel, (v2_t) {100, 100}, (v2_t) {0, 0}, 0xFFFFFFFF >> (SDL_GetTicks()) >> (2));
 }
 
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[]) {
@@ -68,8 +62,7 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[])
     state.renderer = SDL_CreateRenderer(state.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     state.texture = SDL_CreateTexture(state.renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
     state.running = true;
-    state.camera = (v3_t) {0, 0, 0};
-    state.view_dir = (v3_t) {0, 0, 0};
+    state.camera = createCamera((v3_t) {0, 0, 0}, (v3_t) {1, 0, 0});
     while (state.running) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -82,21 +75,27 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[])
         // Movement
         const uint8_t *keys = SDL_GetKeyboardState(NULL);
         if (keys[SDL_SCANCODE_W]) {
-            state.camera.z += 0.1f;
+            state.camera.position.x -= state.camera.view_dir.z * 0.1f;
+            state.camera.position.z += state.camera.view_dir.x * 0.1f;
         }
         if (keys[SDL_SCANCODE_S]) {
-            state.camera.z -= 0.1f;
+            state.camera.position.x += state.camera.view_dir.z * 0.1f;
+            state.camera.position.z -= state.camera.view_dir.x * 0.1f;
         }
         if (keys[SDL_SCANCODE_A]) {
-            state.camera.x -= 0.1f;
+            state.camera.position.x -= state.camera.view_dir.x * 0.1f;
+            state.camera.position.z -= state.camera.view_dir.z * 0.1f;
         }
         if (keys[SDL_SCANCODE_D]) {
-            state.camera.x += 0.1f;
+            state.camera.position.x += state.camera.view_dir.x * 0.1f;
+            state.camera.position.z += state.camera.view_dir.z * 0.1f;
         }
         if (keys[SDL_SCANCODE_RIGHT]) {
-            state.view_dir = rotateX(state.camera, 0.1f);
+            state.camera.view_dir = rotateX(state.camera.view_dir, -0.05f); // Rotate by -0.5 radians
         }
-
+        if (keys[SDL_SCANCODE_LEFT]) {
+            state.camera.view_dir = rotateX(state.camera.view_dir, 0.05f); // Rotate by 0.5 radians
+        }
         memset(state.pixels, 0, sizeof(state.pixels)); // Clear the pixel buffer
         render();
         SDL_UpdateTexture(state.texture, NULL, state.pixels, SCREEN_WIDTH * sizeof(state.pixels[0]));

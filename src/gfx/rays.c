@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include "SDL2/SDL_stdinc.h"
 #include "light.h"
-#include "renderer.h"
+#include "gfx.h"
 #include "color.h"
 
 // IMPORTANT

@@ -2,8 +2,8 @@
 // Created by cp176 on 12/28/2024.
 //
 
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef GFX_H
+#define GFX_H
 
 #include "typedef.h"
 #include "utils/utils.h"
@@ -11,5 +11,6 @@
 #include "light.h"
 #include "scene.h"
 #include "rays.h"
+#include "camera.h"
 
-#endif //RENDERER_H
+#endif //GFX_H

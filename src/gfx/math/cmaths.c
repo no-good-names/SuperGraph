@@ -4,6 +4,8 @@
 #include "../typedef.h"
 #include "cmaths.h"
 
+#include "../utils/utils.h"
+
 // add two vectors
 v3_t v3_add(const v3_t a, const v3_t b) {
     return (v3_t) {
@@ -83,18 +85,17 @@ __attribute__((deprecated)) v3_t getPixelIndex(uint32_t x, uint32_t y) {
 
 void drawLine(void (setPixel)(int32_t x, int32_t y, uint32_t color), v2_t start, v2_t end, uint32_t color) {
     if (start.x > end.x) {
-        const v2_t temp = start;
-        start = end;
-        end = temp;
+        swap(start, end);
     }
 
-    // Calculate the slope (a)
     const float a = (end.y - start.y) / (end.x - start.x);
     float y = start.y;
 
-    // Draw the line
     for (int32_t x = (int) start.x; (float) x <= end.x; x++) {
         setPixel(x, (int32_t)roundf(y), color); // Use round to handle fractional y
         y += a; // Increment y based on the slope
     }
 }
+
+
+

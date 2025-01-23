@@ -17,17 +17,25 @@ typedef struct Vector2_t {
 	float x, y;
 } v2_t;
 
+typedef struct IVector2_t {
+	int x, y;
+} iv2_t;
+
 typedef struct Vector3_t {
 	float x, y, z;
 } v3_t;
 
-typedef struct IntVector3_t {
+typedef struct IVector3_t {
 	int x, y, z;
 } iv3_t;
 
 typedef struct Vector4_t {
 	float x, y, z, w;
 } v4_t;
+
+typedef struct IVector4_t {
+	int x, y, z, w;
+} iv4_t;
 
 typedef struct Point_t {
 	float x, y, z;
@@ -40,17 +48,17 @@ typedef struct Sphere_t {
 } Sphere_t;
 
 #define MAT2_IDENTITY ((mat2_t){    \
-{1, 0},                     \
-{0, 1}})
+		{1, 0},                     \
+		{0, 1}})
 #define MAT3_IDENTITY ((mat3_t){    \
-{1, 0, 0},                  \
-{0, 1, 0},                  \
-{0, 0, 1}})
+		{1, 0, 0},                  \
+		{0, 1, 0},                  \
+		{0, 0, 1}})
 #define MAT4_IDENTITY ((mat4_t){    \
-{1, 0, 0, 0},               \
-{0, 1, 0, 0},               \
-{0, 0, 1, 0},               \
-{0, 0, 0, 1}})
+		{1, 0, 0, 0},               \
+		{0, 1, 0, 0},               \
+		{0, 0, 1, 0},               \
+		{0, 0, 0, 1}})
 
 typedef float mat2_t[2][2];
 typedef float mat3_t[3][3];
@@ -72,4 +80,5 @@ v3_t rayeq(v3_t origin, v3_t dir, float step);
 // for future reference and/or playing around
 DEPRECATED("This is done by SDL2 in this project") v3_t getPixelIndex(uint32_t x, uint32_t y);
 void drawLine(void (*setPixel)(int32_t x, int32_t y, uint32_t color), v2_t start, v2_t end, uint32_t color);
+
 #endif // CMATHS_H
