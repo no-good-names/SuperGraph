@@ -11,6 +11,7 @@
 #include "light.h"
 #include "scene.h"
 #include "rays.h"
+#include "prim.h"
 #include "camera.h"
 
 #endif //GFX_H

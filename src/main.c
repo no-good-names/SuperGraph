@@ -2,7 +2,10 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <math.h>
+#include "SDL2/SDL_scancode.h"
+#include "gfx/camera.h"
 #include "gfx/gfx.h"
+#include "gfx/rays.h"
 
 struct {
     SDL_Window *window; // canvas
@@ -27,7 +30,7 @@ Sphere_t s[4] = {
 Light_t light = {
     .type = LIGHT_POINT,
     .position = {0, 0, 0},
-    .intensity = 1.0f
+    .intensity = 0.6f
 };
 
 // Sets the pixel at the given x and y coordinates to the given color
@@ -53,6 +56,7 @@ void render() {
             setPixel(x, y, color);
         }
     }
+    // Test drawLine
     drawLine(setPixel, (v2_t) {100, 100}, (v2_t) {0, 0}, 0xFFFFFFFF >> (SDL_GetTicks()) >> (2));
 }
 
