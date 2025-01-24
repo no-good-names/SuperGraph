@@ -27,5 +27,7 @@ add_executable(SuperGraph
         src/gfx/rays.h
         src/gfx/camera.h
         src/gfx/camera.c
+        src/gfx/prim.h
+        src/gfx/prim.c
 )
 target_link_libraries(SuperGraph ${LIBS})
